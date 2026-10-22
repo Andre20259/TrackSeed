@@ -1,0 +1,48 @@
+# ---- LaTeX compilation artifacts ----
+# Core
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.dvi
+*.xdv
+*.synctex
+*.synctex.gz
+*.synctex(busy)
+*.auxlock
+
+# Beamer
+*.nav
+*.snm
+*.vrb
+
+# Indexes, glossaries, nomenclature
+*.idx
+*.ilg
+*.ind
+*.glo
+*.gls
+*.glg
+*.acn
+*.acr
+*.alg
+*.ist
+*.nlo
+*.nls
+
+# Package outputs (listings, minted, svg, theorems)
+*.lol
+*.loa
+*.thm
+*.brf
+*.spl
+_minted*/
+*.pyg
+svg-inkscape/
+
+# Compiled paper (figure PDFs in assets/ are still tracked)
+docs/LaTeX_paper/main.pdf
