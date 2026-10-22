@@ -20,12 +20,28 @@
 \providecommand{\BIBdecl}{\relax}
 \BIBdecl
 
+\bibitem{fsds2026}
+\BIBentryALTinterwordspacing
+{Formula Student Germany}, ``Formula student driverless specification 2026,'' Version 1.1, May 2026, accessed: Oct. 22, 2026. [Online]. Available: \url{https://www.formulastudent.de/fileadmin/user_upload/all/2026/rules/FS_Driverless_Specification_2026_v1.1.pdf}
+\BIBentrySTDinterwordspacing
+
+\bibitem{kabzan2020}
+J.~Kabzan, M.~de~la Iglesia~Valls, V.~Reijgwart \emph{et~al.}, ``{AMZ} driverless: The full autonomous racing system,'' \emph{Journal of Field Robotics}, vol.~37, no.~7, pp. 1267--1294, 2020.
+
 \bibitem{azuma1997}
 R.~T. Azuma, ``A survey of augmented reality,'' \emph{Presence: Teleoperators and Virtual Environments}, vol.~6, no.~4, pp. 355--385, 1997.
 
-\bibitem{ieeeauthor}
+\bibitem{arcore}
 \BIBentryALTinterwordspacing
-{IEEE}, ``Authoring tools and templates,'' IEEE Author Center Conferences, accessed: Sep. 22, 2026. [Online]. Available: \url{https://conferences.ieeeauthorcenter.ieee.org/write-your-paper/authoring-tools-and-templates/}
+{Google}, ``{ARCore} fundamental concepts,'' Google for Developers, accessed: Oct. 22, 2026. [Online]. Available: \url{https://developers.google.com/ar/develop/fundamentals}
 \BIBentrySTDinterwordspacing
+
+\bibitem{chalhoub2019}
+\BIBentryALTinterwordspacing
+J.~Chalhoub and S.~K. Ayer, ``Effect of varying task attributes on augmented reality aided point layout,'' \emph{Journal of Information Technology in Construction (ITcon)}, vol.~24, pp. 95--111, 2019. [Online]. Available: \url{https://www.itcon.org/2019/6}
+\BIBentrySTDinterwordspacing
+
+\bibitem{kritzinger2018}
+W.~Kritzinger, M.~Karner, G.~Traar, J.~Henjes, and W.~Sihn, ``Digital twin in manufacturing: A categorical literature review and classification,'' \emph{IFAC-PapersOnLine}, vol.~51, no.~11, pp. 1016--1022, 2018.
 
 \end{thebibliography}
