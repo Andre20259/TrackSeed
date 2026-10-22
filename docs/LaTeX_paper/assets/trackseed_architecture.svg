@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="330" viewBox="0 0 1000 330"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#1b1f1d"/></marker></defs>
+<rect width="1000" height="330" fill="#ffffff"/>
+<rect x="10" y="30" width="150" height="270" rx="12" fill="#f3f7f4" stroke="#b9cbbf" stroke-width="1.4" stroke-dasharray="5 4"/>
+<text x="85" y="52" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1b1f1d" text-anchor="middle">Physical track</text>
+<text x="85" y="68" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="middle">test field</text>
+<path d="M33.2 120L38.6 98H41.4L46.8 120Z" fill="#2563eb"/>
+<rect x="31.1" y="119" width="17.7" height="3" fill="#333"/>
+<path d="M58.2 108L63.6 86H66.4L71.8 108Z" fill="#2563eb"/>
+<rect x="56.1" y="107" width="17.7" height="3" fill="#333"/>
+<path d="M88.2 104L93.6 82H96.4L101.8 104Z" fill="#2563eb"/>
+<rect x="86.1" y="103" width="17.7" height="3" fill="#333"/>
+<path d="M118.2 112L123.6 90H126.4L131.8 112Z" fill="#2563eb"/>
+<rect x="116.1" y="111" width="17.7" height="3" fill="#333"/>
+<path d="M33.2 175L38.6 153H41.4L46.8 175Z" fill="#eab308"/>
+<rect x="31.1" y="174" width="17.7" height="3" fill="#333"/>
+<path d="M61.2 165L66.6 143H69.4L74.8 165Z" fill="#eab308"/>
+<rect x="59.1" y="164" width="17.7" height="3" fill="#333"/>
+<path d="M91.2 162L96.6 140H99.4L104.8 162Z" fill="#eab308"/>
+<rect x="89.1" y="161" width="17.7" height="3" fill="#333"/>
+<path d="M121.2 170L126.6 148H129.4L134.8 170Z" fill="#eab308"/>
+<rect x="119.1" y="169" width="17.7" height="3" fill="#333"/>
+<path d="M43.9 232L50.4 206H53.6L60.1 232Z" fill="#f97316"/>
+<rect x="41.5" y="231" width="21.0" height="3" fill="#333"/>
+<path d="M109.9 232L116.4 206H119.6L126.1 232Z" fill="#f97316"/>
+<rect x="107.5" y="231" width="21.0" height="3" fill="#333"/>
+<rect x="61" y="245" width="18" height="18" rx="1" fill="#111" stroke="#111" stroke-width="1"/>
+<rect x="66" y="250" width="8" height="8" rx="0" fill="#fff" stroke="#fff" stroke-width="1"/>
+<rect x="89" y="245" width="18" height="18" rx="1" fill="#111" stroke="#111" stroke-width="1"/>
+<rect x="94" y="250" width="8" height="8" rx="0" fill="#fff" stroke="#fff" stroke-width="1"/>
+<text x="85" y="282" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="middle">cones + start markers</text>
+<rect x="215" y="20" width="255" height="290" rx="14" fill="#ffffff" stroke="#b45309" stroke-width="1.8"/>
+<text x="229" y="43" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1b1f1d" text-anchor="start">Android app</text>
+<text x="229" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">one phone, one placer</text>
+<rect x="227" y="70" width="231" height="40" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="236" y="87" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b1f1d" text-anchor="start">AR alignment and guidance</text>
+<text x="236" y="102" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">ARCore · two markers + re-alignment</text>
+<rect x="422" y="75" width="30" height="15" rx="7.5" fill="#1e7f4f" stroke="#1e7f4f" stroke-width="1"/>
+<text x="437.0" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">VAR</text>
+<rect x="227" y="117" width="231" height="40" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="236" y="134" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b1f1d" text-anchor="start">On-device cone check</text>
+<text x="236" y="149" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">LiteRT · presence, colour, position</text>
+<rect x="422" y="122" width="30" height="15" rx="7.5" fill="#7c3aed" stroke="#7c3aed" stroke-width="1"/>
+<text x="437.0" y="133" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">MDL</text>
+<rect x="389" y="122" width="30" height="15" rx="7.5" fill="#1f4e79" stroke="#1f4e79" stroke-width="1"/>
+<text x="404.0" y="133" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">EIT</text>
+<rect x="227" y="164" width="231" height="40" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="236" y="181" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b1f1d" text-anchor="start">Car recognition (CarNet)</text>
+<text x="236" y="196" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">LiteRT · session report</text>
+<rect x="422" y="169" width="30" height="15" rx="7.5" fill="#7c3aed" stroke="#7c3aed" stroke-width="1"/>
+<text x="437.0" y="180" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">MDL</text>
+<rect x="227" y="211" width="231" height="40" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="236" y="228" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b1f1d" text-anchor="start">Offline store and sync queue</text>
+<text x="236" y="243" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">Room · replays on reconnect</text>
+<rect x="422" y="216" width="30" height="15" rx="7.5" fill="#b45309" stroke="#b45309" stroke-width="1"/>
+<text x="437.0" y="227" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">DMD</text>
+<rect x="227" y="258" width="231" height="40" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="236" y="275" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b1f1d" text-anchor="start">Native UI</text>
+<text x="236" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">Kotlin · Jetpack Compose</text>
+<rect x="422" y="263" width="30" height="15" rx="7.5" fill="#b45309" stroke="#b45309" stroke-width="1"/>
+<text x="437.0" y="274" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">DMD</text>
+<rect x="555" y="20" width="230" height="290" rx="14" fill="#ffffff" stroke="#1f4e79" stroke-width="1.8"/>
+<text x="569" y="43" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#1b1f1d" text-anchor="start">Cloud platform</text>
+<text x="569" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">Docker containers</text>
+<rect x="567" y="70" width="206" height="40" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="576" y="87" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b1f1d" text-anchor="start">REST API</text>
+<text x="576" y="102" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">tracks, sessions, reports</text>
+<rect x="737" y="75" width="30" height="15" rx="7.5" fill="#1f4e79" stroke="#1f4e79" stroke-width="1"/>
+<text x="752.0" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">EIT</text>
+<rect x="567" y="117" width="206" height="40" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="576" y="134" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b1f1d" text-anchor="start">Sync service</text>
+<text x="576" y="149" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">WebSocket · live updates</text>
+<rect x="737" y="122" width="30" height="15" rx="7.5" fill="#1f4e79" stroke="#1f4e79" stroke-width="1"/>
+<text x="752.0" y="133" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">EIT</text>
+<rect x="567" y="164" width="206" height="40" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="576" y="181" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b1f1d" text-anchor="start">Track digital twin</text>
+<text x="576" y="196" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">state of every cone</text>
+<rect x="737" y="169" width="30" height="15" rx="7.5" fill="#1f4e79" stroke="#1f4e79" stroke-width="1"/>
+<text x="752.0" y="180" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">EIT</text>
+<rect x="704" y="169" width="30" height="15" rx="7.5" fill="#1e7f4f" stroke="#1e7f4f" stroke-width="1"/>
+<text x="719.0" y="180" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">VAR</text>
+<rect x="567" y="211" width="206" height="40" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="576" y="228" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b1f1d" text-anchor="start">Database</text>
+<text x="576" y="243" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">tracks, sessions, twin</text>
+<rect x="737" y="216" width="30" height="15" rx="7.5" fill="#1f4e79" stroke="#1f4e79" stroke-width="1"/>
+<text x="752.0" y="227" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">EIT</text>
+<rect x="567" y="258" width="206" height="40" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="576" y="275" font-family="Segoe UI, Arial, sans-serif" font-size="11.5" font-weight="700" fill="#1b1f1d" text-anchor="start">Model store</text>
+<text x="576" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="10" font-weight="400" fill="#5b6660" text-anchor="start">versions pushed to phone</text>
+<rect x="737" y="263" width="30" height="15" rx="7.5" fill="#7c3aed" stroke="#7c3aed" stroke-width="1"/>
+<text x="752.0" y="274" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">MDL</text>
+<rect x="704" y="263" width="30" height="15" rx="7.5" fill="#1f4e79" stroke="#1f4e79" stroke-width="1"/>
+<text x="719.0" y="274" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">EIT</text>
+<rect x="860" y="20" width="130" height="58" rx="10" fill="#fff7ed" stroke="#f0c48a" stroke-width="1.4"/>
+<text x="925" y="44" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#1b1f1d" text-anchor="middle">Track plan</text>
+<text x="925" y="61" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="middle">JSON · cones, colours</text>
+<rect x="860" y="112" width="130" height="198" rx="14" fill="#ffffff" stroke="#1e7f4f" stroke-width="1.8"/>
+<text x="925" y="136" font-family="Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" fill="#1b1f1d" text-anchor="middle">Web dashboard</text>
+<text x="925" y="151" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="middle">team lead · any browser</text>
+<rect x="870" y="164" width="110" height="38" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="925" y="180" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#1b1f1d" text-anchor="middle">2D track twin</text>
+<text x="925" y="194" font-family="Segoe UI, Arial, sans-serif" font-size="9" font-weight="400" fill="#5b6660" text-anchor="middle">placed / missing / wrong</text>
+<rect x="870" y="210" width="110" height="38" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="925" y="226" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#1b1f1d" text-anchor="middle">Track editor</text>
+<text x="925" y="240" font-family="Segoe UI, Arial, sans-serif" font-size="9" font-weight="400" fill="#5b6660" text-anchor="middle">move, add, remove</text>
+<rect x="870" y="256" width="110" height="38" rx="7" fill="#f6f8f7" stroke="#d5ddd8" stroke-width="1"/>
+<text x="925" y="272" font-family="Segoe UI, Arial, sans-serif" font-size="11" font-weight="700" fill="#1b1f1d" text-anchor="middle">Session reports</text>
+<text x="925" y="286" font-family="Segoe UI, Arial, sans-serif" font-size="9" font-weight="400" fill="#5b6660" text-anchor="middle">track, car, accuracy</text>
+<path d="M160 140L213 140" stroke="#1b1f1d" stroke-width="1.5" fill="none" marker-end="url(#a)" marker-start="url(#a)"/>
+<text x="187" y="128" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="middle">camera</text>
+<text x="187" y="158" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="middle">AR overlay</text>
+<path d="M470 128L553 128" stroke="#1b1f1d" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="512" y="112" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="middle">confirmed cones</text>
+<text x="512" y="123" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#1b1f1d" text-anchor="middle">WebSocket</text>
+<path d="M553 176L470 176" stroke="#1b1f1d" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="512" y="160" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="middle">track, edits</text>
+<text x="512" y="171" font-family="Segoe UI, Arial, sans-serif" font-size="8.2" font-weight="700" fill="#1b1f1d" text-anchor="middle">REST / WebSocket</text>
+<path d="M553 280L470 280" stroke="#1b1f1d" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="512" y="272" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="middle">model updates</text>
+<path d="M785 150L858 150" stroke="#1b1f1d" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="822" y="140" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="middle">live twin</text>
+<path d="M858 196L785 196" stroke="#1b1f1d" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="822" y="186" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="middle">edits</text>
+<path d="M925 78L925 110" stroke="#1b1f1d" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="931" y="98" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="start">upload</text>
+<text x="292" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#5b6660" text-anchor="end">Course units:</text>
+<rect x="300" y="315" width="30" height="15" rx="7.5" fill="#1f4e79" stroke="#1f4e79" stroke-width="1"/>
+<text x="315.0" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">EIT</text>
+<text x="334" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="start">Emerging &amp; Intelligent Tech.</text>
+<rect x="521.2" y="315" width="30" height="15" rx="7.5" fill="#1e7f4f" stroke="#1e7f4f" stroke-width="1"/>
+<text x="536.2" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">VAR</text>
+<text x="555.2" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="start">Virtual &amp; Augmented Reality</text>
+<rect x="736.8000000000001" y="315" width="30" height="15" rx="7.5" fill="#b45309" stroke="#b45309" stroke-width="1"/>
+<text x="751.8000000000001" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">DMD</text>
+<text x="770.8000000000001" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="start">Mobile Devices</text>
+<rect x="857.2" y="315" width="30" height="15" rx="7.5" fill="#7c3aed" stroke="#7c3aed" stroke-width="1"/>
+<text x="872.2" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="700" fill="#fff" text-anchor="middle">MDL</text>
+<text x="891.2" y="326" font-family="Segoe UI, Arial, sans-serif" font-size="9.5" font-weight="400" fill="#5b6660" text-anchor="start">Machine &amp; Deep Learning</text>
+</svg>
