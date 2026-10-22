@@ -15,6 +15,13 @@
 *.synctex(busy)
 *.auxlock
 
+# Bibliography (BibTeX / biber)
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*-blx.bib
+
 # Beamer
 *.nav
 *.snm
