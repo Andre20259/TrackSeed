@@ -1,0 +1,26 @@
+\section{Project Proposal}
+\subsection{Solution and conceptual architecture}
+Before a test day, the team lead uploads a track plan, a JSON file with the position and colour of every cone, through the web dashboard. On the field, one team member opens the track on an ARCore-supported Android phone, aligns it by scanning two printed markers at the start line, and walks the track while the app shows the position and colour of each cone in AR. When a cone is put down, the on-device model checks that it is present, has the right colour and lies within tolerance, and the phone sends the result to the cloud. The team lead follows the twin live on the dashboard and can move, add or remove cones, which immediately updates the guidance on the phone. Before the run, the user points the phone at the car, the on-device classifier identifies which team car is being used, and the app produces a session report with the track, the car, the setup time and the placement accuracy.
+
+Fig.~\ref{fig:architecture} shows the four components and the course unit behind each part. The Android app (DMD) runs the AR alignment and guidance (VAR), the cone check and car recognition (EIT, MDL) and the offline store. The cloud platform (EIT) holds the REST API, the WebSocket sync service, the database with the twin state, the self-made car dataset and the model store. The web dashboard (EIT, VAR) shows and edits the twin. Tracking and inference run on the phone; storage, synchronisation, validation of uploaded tracks and model training run in the cloud. The system depends on an ARCore-supported Android phone, printed markers, a host for the containers, the FSOCO dataset~\cite{vodisch2022} plus the team's own images for the cone check, and the self-made car dataset. Several phones placing cones at once, iOS, and the Geospatial API as the main alignment method are out of scope. The preliminary plan is: October, track format, AR alignment on a skidpad and the start of car image collection, continued on every test day; November, cone verification, car classifier, cloud platform and synchronisation; December, dashboard twin and full autocross tests; January, validation and report. The marker spacing and the model architecture remain provisional.
+
+
+\subsection{Preliminary validation}
+Table~\ref{tab:validation} lists the four criteria, each linked to a hypothesis. H1: phone-based setout with re-alignment keeps cones within the tolerance over a full track, the question the literature leaves open. H2: one person with TrackSeed sets out a track faster than the team's usual tape method. H3: the twin reflects each confirmed cone on the dashboard in about one second. H4: a pretrained mobile network fine-tuned on the self-made dataset identifies the team car on test days not seen in training. The tests will use a skidpad, whose geometry is fixed by the FS rules~\cite{fsds2026}, and an autocross section on the team's test site, measuring each cone against tape measurements from surveyed reference points or a total station, if one is available. Unlike the reviewed studies, which tested small areas with student participants~\cite{kim2025isarc}, these tests cover a full track in its real environment. The success indicators are provisional and will be reviewed after the first field test.
+
+\begin{table}[!t]
+\caption{Planned evaluation criteria}
+\label{tab:validation}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{|L{0.18\columnwidth}|L{0.17\columnwidth}|L{0.35\columnwidth}|L{0.18\columnwidth}|}
+\hline
+\textbf{Criterion} & \textbf{Metric} & \textbf{Proposed test} & \textbf{Success indicator} \\ \hline
+Placement accuracy (H1) & Error per cone (cm) & Set out a skidpad and an autocross section; measure each cone against reference points & Median $\leq$15~cm; no cone over 30~cm \\ \hline
+Setup efficiency (H2) & Setup time (min) & One person with TrackSeed vs the team's tape method on the same track & At least 30\% faster \\ \hline
+Twin synchronisation (H3) & End-to-end latency (ms) & Timestamps from cone confirmation to dashboard display, on Wi-Fi and mobile data & Median $\leq$1~s \\ \hline
+Car identification (H4) & Accuracy and macro F1 & Self-made dataset split by test day; held-out days only, on the phone & $\geq$95\% accuracy; inference $\leq$100~ms \\ \hline
+\end{tabular}
+\end{table}
