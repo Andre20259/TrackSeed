@@ -1,0 +1,49 @@
+:root {
+  --v-font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --v-font-heading: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.v-application {
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Page titles: tighter and bolder than the Material default. */
+.page-title {
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  color: rgba(var(--v-theme-on-surface), 0.6);
+  font-size: 0.9375rem;
+}
+
+.v-card-title {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.v-data-table th {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(var(--v-theme-on-surface), 0.55) !important;
+}
+
+/* Big numbers in stat cards. */
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+/* Placeholder card shown before something is selected. */
+.empty-hint {
+  border-style: dashed !important;
+  background: transparent !important;
+}
