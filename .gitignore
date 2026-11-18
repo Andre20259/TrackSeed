@@ -53,3 +53,25 @@ svg-inkscape/
 
 # Compiled paper (figure PDFs in assets/ are still tracked)
 docs/LaTeX_paper/main.pdf
+
+# ---- Apps (android/ and dashboard/ also have their own .gitignore) ----
+# Node (dashboard, backend)
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.eslintcache
+npm-debug.log*
+
+# Secrets: database passwords, API keys (commit a .env.example instead)
+.env
+.env.*
+!.env.example
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
