@@ -1,17 +1,32 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import type { TrackPlan, TrackSummary } from '@shared/messages'
+import type { Cone, TrackSummary, TrackType } from '@shared/messages'
 import { uploadTrack } from '@/api'
+import { readTrackFile, type ImportedTrack } from '@/api/trackImport'
 import { checkTrackPlan, EXAMPLE_PLAN } from '@/api/trackPlan'
-import { TRACK_TYPE_LABEL } from '@/lib/cones'
+import TwinMap from '@/components/TwinMap.vue'
+import { TRACK_TYPE_LABEL, TRACK_TYPES } from '@/lib/cones'
 
 const open = defineModel<boolean>({ required: true })
 const emit = defineEmits<{ uploaded: [track: TrackSummary] }>()
 
-const plan = ref<TrackPlan | null>(null)
-const errors = ref<string[]>([])
+const imported = ref<ImportedTrack | null>(null)
+const fileError = ref<string | null>(null)
+const name = ref('')
+const type = ref<TrackType | null>(null)
+const sendError = ref<string | null>(null)
 const sending = ref(false)
 
+const typeItems = TRACK_TYPES.map((t) => ({ title: TRACK_TYPE_LABEL[t], value: t }))
+
+const check = computed(() =>
+  imported.value && type.value ? checkTrackPlan({ name: name.value, type: type.value, cones: imported.value.cones }) : null,
+)
+const plan = computed(() => (check.value?.ok ? check.value.plan : null))
+const errors = computed(() => (check.value && !check.value.ok ? check.value.errors : []))
+const preview = computed<Cone[]>(() =>
+  (plan.value?.cones ?? []).map((c, i) => ({ ...c, id: i + 1, state: 'verified' })),
+)
 const colourCounts = computed(() => {
   const n = { blue: 0, yellow: 0, orange: 0 }
   for (const c of plan.value?.cones ?? []) n[c.colour]++
@@ -19,35 +34,36 @@ const colourCounts = computed(() => {
 })
 
 function reset() {
-  plan.value = null
-  errors.value = []
+  imported.value = null
+  fileError.value = null
+  sendError.value = null
+  name.value = ''
+  type.value = null
 }
 
 async function onFile(value: unknown) {
   reset()
   const file = Array.isArray(value) ? value[0] : value
   if (!(file instanceof File)) return
-  let json: unknown
-  try {
-    json = JSON.parse(await file.text())
-  } catch {
-    errors.value = ['The file is not valid JSON.']
+  const result = readTrackFile(await file.text())
+  if ('error' in result) {
+    fileError.value = result.error
     return
   }
-  const result = checkTrackPlan(json)
-  if (result.ok) plan.value = result.plan
-  else errors.value = result.errors
+  imported.value = result
+  name.value = result.name ?? file.name.replace(/\.(ya?ml|json)$/i, '').replace(/[_]+/g, ' ')
+  type.value = result.type && TRACK_TYPES.includes(result.type) ? result.type : null
 }
 
 async function send() {
   if (!plan.value) return
   sending.value = true
+  sendError.value = null
   try {
     emit('uploaded', await uploadTrack(plan.value))
     open.value = false
-    reset()
   } catch (e) {
-    errors.value = [e instanceof Error ? e.message : String(e)]
+    sendError.value = e instanceof Error ? e.message : String(e)
   } finally {
     sending.value = false
   }
@@ -55,31 +71,61 @@ async function send() {
 </script>
 
 <template>
-  <v-dialog v-model="open" max-width="560" @after-leave="reset">
-    <v-card title="Upload a track" subtitle="A JSON file with the position and colour of every cone">
+  <v-dialog v-model="open" max-width="640" scrollable @after-leave="reset">
+    <v-card title="Upload a track" subtitle="TrackSeed JSON or an FS track YAML file (left, right, unknown cone lists)">
       <v-card-text>
         <v-file-input
-          label="Track file (.json)"
-          accept=".json,application/json"
+          label="Track file (.yaml, .yml or .json)"
+          accept=".yaml,.yml,.json,application/json,application/yaml,text/yaml"
           prepend-icon=""
           prepend-inner-icon="mdi-file-upload-outline"
-          variant="outlined"
           @update:model-value="onFile"
         />
 
-        <v-alert v-if="errors.length" type="error" variant="tonal" class="mb-4" title="This track can't be uploaded">
-          <ul class="pl-4">
-            <li v-for="e in errors" :key="e">{{ e }}</li>
+        <v-alert v-if="fileError" type="error" variant="tonal" class="mb-4" :text="fileError" />
+
+        <template v-if="imported">
+          <div class="text-body-small text-medium-emphasis mb-3">Read as {{ imported.format }}</div>
+          <v-row density="compact">
+            <v-col cols="12" sm="7">
+              <v-text-field v-model="name" label="Track name" density="comfortable" />
+            </v-col>
+            <v-col cols="12" sm="5">
+              <v-select
+                v-model="type"
+                :items="typeItems"
+                label="Type"
+                density="comfortable"
+                :hint="type ? '' : 'The file does not say; choose one'"
+                persistent-hint
+              />
+            </v-col>
+          </v-row>
+
+          <v-alert v-if="errors.length" type="error" variant="tonal" class="mb-4" title="This track can't be uploaded">
+            <ul class="pl-4">
+              <li v-for="e in errors" :key="e">{{ e }}</li>
+            </ul>
+          </v-alert>
+
+          <template v-if="plan">
+            <v-card class="mb-3">
+              <TwinMap :cones="preview" height="260px" />
+            </v-card>
+            <div class="text-body-medium mb-2">
+              {{ plan.cones.length }} cones: {{ colourCounts.blue }} blue, {{ colourCounts.yellow }} yellow,
+              {{ colourCounts.orange }} orange
+            </div>
+          </template>
+          <ul v-if="imported.notes.length" class="text-body-small text-medium-emphasis pl-4 mb-2">
+            <li v-for="n in imported.notes" :key="n">{{ n }}</li>
           </ul>
-        </v-alert>
+        </template>
 
-        <v-alert v-if="plan" type="success" variant="tonal" class="mb-4" :title="plan.name">
-          {{ TRACK_TYPE_LABEL[plan.type] }} · {{ plan.cones.length }} cones
-          ({{ colourCounts.blue }} blue, {{ colourCounts.yellow }} yellow, {{ colourCounts.orange }} orange)
-        </v-alert>
+        <v-alert v-if="sendError" type="error" variant="tonal" class="mb-4" title="Upload failed" :text="sendError" />
 
-        <v-expansion-panels variant="accordion">
-          <v-expansion-panel title="Expected format">
+        <v-expansion-panels v-if="!imported" variant="accordion" class="mt-2">
+          <v-expansion-panel title="TrackSeed JSON format">
             <v-expansion-panel-text>
               <p class="text-body-medium mb-2">
                 Positions in metres from marker A (x east, y north). Type is skidpad, acceleration, autocross or

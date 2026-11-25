@@ -128,7 +128,7 @@ function commitPosition(axis: 'x' | 'y', value: string) {
                 <span class="text-body-medium text-medium-emphasis">{{ twin.done }} of {{ twin.total }} cones down</span>
               </div>
               <v-progress-linear :model-value="progress" color="primary" height="8" rounded />
-              <v-row dense class="mt-3">
+              <v-row density="compact" class="mt-3">
                 <v-col v-for="s in ['verified', 'placed', 'planned', 'wrong_colour', 'missing'] as const" :key="s" cols="6">
                   <div class="text-title-medium">{{ twin.counts[s] }}</div>
                   <div class="text-body-small text-medium-emphasis">{{ STATE_LABEL[s] }}</div>
@@ -175,7 +175,7 @@ function commitPosition(axis: 'x' | 'y', value: string) {
                   <template #prepend><v-icon icon="mdi-circle" :color="CONE_HEX[c]" /></template>
                 </v-btn>
               </v-btn-toggle>
-              <v-row dense>
+              <v-row density="compact">
                 <v-col cols="6">
                   <v-text-field
                     :model-value="twin.selected.x"

@@ -62,6 +62,7 @@ onMounted(async () => {
         </template>
         <template #[`item.setupMin`]="{ item }">{{ item.setupMin }} min</template>
         <template #[`item.medianErrorCm`]="{ item }">{{ item.medianErrorCm }} cm</template>
+        <template #no-data>No sessions yet. A session is recorded when a track is set out with the phone app.</template>
       </v-data-table>
     </v-card>
   </v-container>

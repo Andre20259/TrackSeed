@@ -7,7 +7,9 @@ const drawer = ref<boolean | null>(null)
 const liveTrack = ref<TrackSummary | null>(null)
 
 onMounted(async () => {
-  liveTrack.value = (await listTracks()).find((t) => t.activeSessionId != null) ?? null
+  // The Tracks page reports a missing backend; the sidebar just shows no live track.
+  const tracks = await listTracks().catch(() => [])
+  liveTrack.value = tracks.find((t) => t.activeSessionId != null) ?? null
 })
 </script>
 

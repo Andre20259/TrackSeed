@@ -23,10 +23,18 @@ const headers = [
 
 const shown = computed(() => tracks.value.filter((t) => type.value == null || t.type === type.value))
 
+const error = ref<string | null>(null)
+
 async function load() {
   loading.value = true
-  tracks.value = await listTracks()
-  loading.value = false
+  error.value = null
+  try {
+    tracks.value = await listTracks()
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : String(e)
+  } finally {
+    loading.value = false
+  }
 }
 
 function openTrack(_e: unknown, row: { item: TrackSummary }) {
@@ -49,6 +57,10 @@ onMounted(load)
       </div>
       <v-btn color="primary" prepend-icon="mdi-upload" text="Upload track" @click="uploading = true" />
     </div>
+
+    <v-alert v-if="error" type="error" variant="tonal" class="mb-4" :text="error">
+      <template #append><v-btn variant="text" text="Retry" @click="load" /></template>
+    </v-alert>
 
     <v-card>
       <v-card-text class="d-flex flex-wrap align-center ga-4">
@@ -86,7 +98,7 @@ onMounted(load)
         <template #[`item.type`]="{ item }">{{ TRACK_TYPE_LABEL[item.type] }}</template>
         <template #[`item.lengthM`]="{ item }">{{ formatLength(item.lengthM) }}</template>
         <template #[`item.uploadedAt`]="{ item }">{{ formatDate(item.uploadedAt) }}</template>
-        <template #no-data>No tracks yet. Upload a track JSON to start.</template>
+        <template #no-data>No tracks yet. Upload a track file (YAML or JSON) to start.</template>
       </v-data-table>
     </v-card>
 
