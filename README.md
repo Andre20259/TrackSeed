@@ -24,6 +24,7 @@ Early prototype. The Android app and the dashboard are UI mockups that run on ha
 | `shared/messages.ts` | Types shared by the dashboard and the future backend, and mirrored in the Android app: cones, tracks, sessions, and WebSocket messages. |
 | `docs/LaTeX_paper/` | State-of-the-art paper and project proposal (IEEE format). |
 | `docs/presentation/` | Slide decks (EN and PT). |
+| `docs/markers/` | Printable alignment markers A and B (ARCore Augmented Images) and the script that makes them. |
 
 Track coordinates are in metres in the track's local frame, with the origin at marker A, x pointing east and y pointing north.
 
