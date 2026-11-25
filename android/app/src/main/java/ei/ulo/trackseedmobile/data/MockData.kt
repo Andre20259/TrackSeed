@@ -124,6 +124,3 @@ private fun skidpad(): List<Cone> {
     cones += Cone(0f, 1.1f, ConeColor.Orange)
     return cones
 }
-
-fun initials(name: String): String =
-    name.split(" ").filter { it.isNotBlank() }.take(2).joinToString("") { it.first().uppercase() }.ifEmpty { "?" }

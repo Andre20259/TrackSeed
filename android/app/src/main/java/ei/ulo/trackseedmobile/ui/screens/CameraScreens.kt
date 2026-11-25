@@ -25,7 +25,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -46,7 +45,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import ei.ulo.trackseedmobile.data.ConeColor
@@ -66,24 +64,6 @@ import kotlinx.coroutines.delay
 
 // The AR content, detections and model outputs on these screens are static placeholders drawn over
 // the live camera; ARCore and LiteRT are added when the features are implemented.
-
-// Team QR code scan, opened from onboarding
-@Composable
-fun QrScanScreen(onBack: () -> Unit) {
-    CameraScreen(
-        header = { CameraHeader("Scan team QR code", "Point the camera at the code on the team dashboard") },
-        overlay = { ScanFrame(Modifier.align(Alignment.Center).size(240.dp)) },
-        sheet = {
-            Text(
-                "QR reading is not active yet. Enter the team code by hand for now.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-            )
-            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth().height(48.dp)) { Text("Enter code instead") }
-        },
-    )
-}
 
 // 05 AR alignment
 @Composable

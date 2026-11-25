@@ -1,6 +1,5 @@
 package ei.ulo.trackseedmobile.ui.components
 
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -115,13 +114,5 @@ fun InitialsBadge(text: String, shape: Shape = CircleShape, size: Dp = 44.dp) {
         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
     ) {
         Box(contentAlignment = Alignment.Center) { Text(text, style = MaterialTheme.typography.titleSmall) }
-    }
-}
-
-/** App mark: a cone on the brand green, as in the onboarding mockup. */
-@Composable
-fun AppMark(size: Dp = 96.dp) {
-    Surface(Modifier.size(size), shape = MaterialTheme.shapes.extraLarge, color = MaterialTheme.colorScheme.primary) {
-        Canvas(Modifier.fillMaxSize().padding(size / 5)) { drawCone(ConeColor.Orange.color) }
     }
 }

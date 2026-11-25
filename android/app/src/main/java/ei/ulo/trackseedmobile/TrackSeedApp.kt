@@ -1,6 +1,5 @@
 package ei.ulo.trackseedmobile
 
-import android.content.Context
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
@@ -21,15 +20,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.edit
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -43,17 +39,13 @@ import ei.ulo.trackseedmobile.ui.screens.ConeCheckScreen
 import ei.ulo.trackseedmobile.ui.screens.HistoryScreen
 import ei.ulo.trackseedmobile.ui.screens.HomeScreen
 import ei.ulo.trackseedmobile.ui.screens.LiveProgressScreen
-import ei.ulo.trackseedmobile.ui.screens.OnboardingScreen
 import ei.ulo.trackseedmobile.ui.screens.PlacementScreen
-import ei.ulo.trackseedmobile.ui.screens.QrScanScreen
 import ei.ulo.trackseedmobile.ui.screens.SessionReportScreen
 import ei.ulo.trackseedmobile.ui.screens.SettingsScreen
 import ei.ulo.trackseedmobile.ui.screens.TrackDetailScreen
 import ei.ulo.trackseedmobile.ui.screens.TracksScreen
 
 private object Routes {
-    const val ONBOARDING = "onboarding"
-    const val SCAN = "scan"
     const val HOME = "home"
     const val TRACKS = "tracks"
     const val HISTORY = "history"
@@ -80,12 +72,8 @@ private val tabs = listOf(
 
 @Composable
 fun TrackSeedApp() {
-    val context = LocalContext.current
-    val prefs = remember { context.getSharedPreferences("trackseed", Context.MODE_PRIVATE) }
     val nav = rememberNavController()
     val route = nav.currentBackStackEntryAsState().value?.destination?.route
-    val start = remember { if (prefs.getBoolean("joined", false)) Routes.HOME else Routes.ONBOARDING }
-    var userName by rememberSaveable { mutableStateOf(prefs.getString("name", null) ?: "") }
     var cone by rememberSaveable { mutableIntStateOf(119) }
     val sessions = remember { MockData.sessions.toMutableStateList() }
 
@@ -114,22 +102,9 @@ fun TrackSeedApp() {
             }
         },
     ) { padding ->
-        NavHost(nav, startDestination = start, modifier = Modifier.padding(padding).consumeWindowInsets(padding)) {
-            composable(Routes.ONBOARDING) {
-                OnboardingScreen(
-                    onJoin = { name ->
-                        prefs.edit { putBoolean("joined", true); putString("name", name) }
-                        userName = name
-                        nav.navigate(Routes.HOME) { popUpTo(Routes.ONBOARDING) { inclusive = true } }
-                    },
-                    onScanQr = { nav.navigate(Routes.SCAN) },
-                )
-            }
-            composable(Routes.SCAN) { QrScanScreen(onBack = { nav.popBackStack() }) }
-
+        NavHost(nav, startDestination = Routes.HOME, modifier = Modifier.padding(padding).consumeWindowInsets(padding)) {
             composable(Routes.HOME) {
                 HomeScreen(
-                    userName = userName,
                     onContinue = { nav.navigate(Routes.PLACE) },
                     onOpenTrack = { nav.navigate(Routes.track(it)) },
                     onSeeAll = { openTab(Routes.TRACKS) },
@@ -143,12 +118,7 @@ fun TrackSeedApp() {
                     onDelete = { sessions.remove(it) },
                 )
             }
-            composable(Routes.SETTINGS) {
-                SettingsScreen(userName = userName, onLeaveTeam = {
-                    prefs.edit { clear() }
-                    nav.navigate(Routes.ONBOARDING) { popUpTo(nav.graph.id) { inclusive = true } }
-                })
-            }
+            composable(Routes.SETTINGS) { SettingsScreen() }
 
             composable(Routes.TRACK, arguments = listOf(navArgument("id") { type = NavType.StringType })) { entry ->
                 TrackDetailScreen(
