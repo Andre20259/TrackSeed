@@ -11,25 +11,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.ViewInAr
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -42,7 +35,6 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
@@ -58,100 +50,29 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ei.ulo.trackseedmobile.data.ConeColor
 import ei.ulo.trackseedmobile.data.MockData
 import ei.ulo.trackseedmobile.data.Session
 import ei.ulo.trackseedmobile.data.TrackType
-import ei.ulo.trackseedmobile.data.initials
-import ei.ulo.trackseedmobile.ui.components.AppMark
 import ei.ulo.trackseedmobile.ui.components.ConeDot
-import ei.ulo.trackseedmobile.ui.components.InitialsBadge
 import ei.ulo.trackseedmobile.ui.components.TabHeader
 import ei.ulo.trackseedmobile.ui.components.TrackCard
-import ei.ulo.trackseedmobile.ui.components.TrackMap
 import ei.ulo.trackseedmobile.ui.components.TrackThumb
 import kotlin.math.roundToInt
 
-// 01 Onboarding
-@Composable
-fun OnboardingScreen(onJoin: (String) -> Unit, onScanQr: () -> Unit) {
-    var code by rememberSaveable { mutableStateOf("") }
-    var name by rememberSaveable { mutableStateOf("") }
-    Column(
-        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).systemBarsPadding().imePadding()
-            .padding(horizontal = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Spacer(Modifier.height(32.dp))
-        AppMark()
-        Spacer(Modifier.height(16.dp))
-        Text("TrackSeed", style = MaterialTheme.typography.displaySmall)
-        Text(
-            "Set out Formula Student tracks with augmented reality",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(Modifier.height(24.dp))
-        ElevatedCard(Modifier.fillMaxWidth()) {
-            TrackMap(TrackType.Autocross, Modifier.fillMaxWidth().height(150.dp).padding(16.dp), dotSize = 3.dp)
-        }
-        Spacer(Modifier.height(24.dp))
-        OutlinedTextField(
-            value = code,
-            onValueChange = { code = it.uppercase() },
-            label = { Text("Team code") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(Modifier.height(12.dp))
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Your name") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Spacer(Modifier.height(24.dp))
-        Button(
-            onClick = { onJoin(name.trim()) },
-            enabled = code.isNotBlank() && name.isNotBlank(),
-            modifier = Modifier.fillMaxWidth().height(56.dp),
-        ) { Text("Join team") }
-        Spacer(Modifier.height(12.dp))
-        OutlinedButton(onClick = onScanQr, modifier = Modifier.fillMaxWidth().height(56.dp)) {
-            Icon(Icons.Outlined.QrCodeScanner, contentDescription = null)
-            Spacer(Modifier.width(8.dp))
-            Text("Scan team QR code")
-        }
-        Spacer(Modifier.height(16.dp))
-        Text(
-            "Camera and location are only requested when you start a session",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(Modifier.height(24.dp))
-    }
-}
-
 // 02 Home
 @Composable
-fun HomeScreen(userName: String, onContinue: () -> Unit, onOpenTrack: (String) -> Unit, onSeeAll: () -> Unit) {
+fun HomeScreen(onContinue: () -> Unit, onOpenTrack: (String) -> Unit, onSeeAll: () -> Unit) {
     val recent = MockData.tracks.filter { it.lastUsed != null }.take(2)
     LazyColumn(contentPadding = PaddingValues(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { TabHeader("Hi, $userName", "FS Team Leiria · team lead online") }
+        item { TabHeader("TrackSeed", "FS Team Leiria · team lead online") }
         item { TodaySessionCard(Modifier.padding(horizontal = 16.dp)) }
         item {
             Button(onClick = onContinue, modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth().height(56.dp)) {
@@ -341,27 +262,16 @@ private fun SwipeToDelete(onDelete: () -> Unit, content: @Composable () -> Unit)
 
 // 12 Settings
 @Composable
-fun SettingsScreen(userName: String, onLeaveTeam: () -> Unit) {
+fun SettingsScreen() {
     // shortcut: settings live only in memory, move to DataStore when the features use them.
     var tolerance by rememberSaveable { mutableFloatStateOf(15f) }
     var haptics by rememberSaveable { mutableStateOf(true) }
     var arrows by rememberSaveable { mutableStateOf(true) }
     var wifiOnly by rememberSaveable { mutableStateOf(false) }
-    var confirmLeave by remember { mutableStateOf(false) }
     val offline = MockData.tracks.count { it.downloaded }
 
     LazyColumn(contentPadding = PaddingValues(bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         item { TabHeader("Settings") }
-        item {
-            SettingsCard {
-                ListItem(
-                    headlineContent = { Text(userName, style = MaterialTheme.typography.titleMedium) },
-                    supportingContent = { Text("FS Team Leiria · placer") },
-                    leadingContent = { InitialsBadge(initials(userName), size = 52.dp) },
-                    colors = ListItemDefaults.colors(containerColor = Color.Transparent),
-                )
-            }
-        }
         item { SectionLabel("Placement") }
         item {
             SettingsCard {
@@ -402,26 +312,6 @@ fun SettingsScreen(userName: String, onLeaveTeam: () -> Unit) {
                 }
             }
         }
-        item {
-            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                TextButton(
-                    onClick = { confirmLeave = true },
-                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error),
-                ) { Text("Leave team") }
-            }
-        }
-    }
-
-    if (confirmLeave) {
-        AlertDialog(
-            onDismissRequest = { confirmLeave = false },
-            title = { Text("Leave FS Team Leiria?") },
-            text = { Text("You will need the team code to join again.") },
-            confirmButton = {
-                TextButton(onClick = { confirmLeave = false; onLeaveTeam() }) { Text("Leave") }
-            },
-            dismissButton = { TextButton(onClick = { confirmLeave = false }) { Text("Cancel") } },
-        )
     }
 }
 
