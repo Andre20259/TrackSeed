@@ -3,42 +3,30 @@ import 'vuetify/styles'
 import '@/assets/main.css'
 import { createVuetify } from 'vuetify'
 
-// Slate neutrals with a violet accent: the accent stays clear of the blue, yellow and orange cones on the map.
+// Black and yellow, like the team's branding. Dark only: yellow needs a dark background to read well.
+// Cone colours on the map are separate (lib/cones.ts) because they mean real cone colours.
 export default createVuetify({
   theme: {
-    defaultTheme: 'system',
+    defaultTheme: 'dark',
     themes: {
-      light: {
-        dark: false,
-        colors: {
-          background: '#F6F7FB',
-          surface: '#FFFFFF',
-          'surface-variant': '#EEF0F6',
-          'on-surface-variant': '#334155',
-          primary: '#6D4AFF',
-          secondary: '#475569',
-          error: '#E5484D',
-          warning: '#D97706',
-          success: '#12A594',
-          info: '#0284C7',
-        },
-        variables: { 'border-color': '#0F172A', 'border-opacity': 0.08 },
-      },
       dark: {
         dark: true,
         colors: {
-          background: '#0B0F1A',
-          surface: '#121826',
-          'surface-variant': '#1C2333',
-          'on-surface-variant': '#CBD5E1',
-          primary: '#9D87FF',
-          secondary: '#94A3B8',
-          error: '#FF6B6F',
-          warning: '#F5B544',
-          success: '#3DD6C3',
-          info: '#38BDF8',
+          background: '#111111',
+          surface: '#1A1A1A',
+          'surface-variant': '#262626',
+          'on-surface-variant': '#D6D6D6',
+          primary: '#FFE100',
+          'on-primary': '#111111',
+          secondary: '#BDBDBD',
+          'on-secondary': '#111111',
+          error: '#FF5A5A',
+          warning: '#FF9F1A',
+          success: '#4ADE80',
+          'on-success': '#111111',
+          info: '#5AB0FF',
         },
-        variables: { 'border-color': '#E2E8F0', 'border-opacity': 0.1 },
+        variables: { 'border-color': '#FFFFFF', 'border-opacity': 0.1 },
       },
     },
   },

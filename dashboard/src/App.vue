@@ -84,8 +84,8 @@ onMounted(async () => {
   border-radius: 11px;
   display: grid;
   place-items: center;
-  color: #fff;
-  background: linear-gradient(135deg, rgb(var(--v-theme-primary)), #f97316);
+  color: rgb(var(--v-theme-on-primary));
+  background: rgb(var(--v-theme-primary));
 }
 .brand-name {
   font-weight: 700;

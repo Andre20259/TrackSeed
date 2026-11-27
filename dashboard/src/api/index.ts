@@ -21,12 +21,7 @@ export const listTracks = () => backend<TrackSummary[]>('/tracks')
 
 export const getTrack = (id: string) => backend<Track>(`/tracks/${encodeURIComponent(id)}`)
 
-export const uploadTrack = (plan: TrackPlan) =>
-  backend<TrackSummary>('/tracks', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(plan),
-  })
+export const uploadTrack = (plan: TrackPlan) => backend<TrackSummary>('/tracks', json('POST', plan))
 
 /** Subscribes to a track's live updates; returns the function that closes the connection. */
 export function connectTrack(_trackId: string, _onMessage: (m: ServerMessage) => void): () => void {
@@ -34,19 +29,16 @@ export function connectTrack(_trackId: string, _onMessage: (m: ServerMessage) =>
   return () => {}
 }
 
-const NO_EDITS = 'Editing tracks is not available yet: the backend has no edit endpoints.'
+const json = (method: string, body: unknown): RequestInit => ({
+  method,
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(body),
+})
+const conesOf = (trackId: string) => `/tracks/${encodeURIComponent(trackId)}/cones`
 
-export async function updateCone(_trackId: string, _coneId: number, _patch: { x?: number; y?: number; colour?: ConeColour }) {
-  throw new Error(NO_EDITS)
-}
-
-export async function addCone(_trackId: string, _cone: { x: number; y: number; colour: ConeColour }) {
-  throw new Error(NO_EDITS)
-}
-
-export async function removeCone(_trackId: string, _coneId: number) {
-  throw new Error(NO_EDITS)
-}
+/** Saves an edited track in one request: the backend makes its cones exactly these. */
+export const saveCones = (trackId: string, cones: { id: number; x: number; y: number; colour: ConeColour }[]) =>
+  backend<Track>(conesOf(trackId), json('PUT', cones))
 
 // shortcut: the backend stores no sessions yet; these return nothing until the phone app reports sessions.
 export async function listSessions(): Promise<Session[]> {

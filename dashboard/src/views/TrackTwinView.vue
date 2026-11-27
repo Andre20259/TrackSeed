@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import type { ConeColour } from '@shared/messages'
 import TwinMap from '@/components/TwinMap.vue'
 import { useTwinStore } from '@/stores/twin'
@@ -21,6 +22,17 @@ onBeforeUnmount(() => {
 })
 
 watch(() => props.id, (id) => twin.open(id), { immediate: true })
+
+// Unsaved edits are only in this page: ask before leaving it, or closing or reloading the tab.
+const mayLeave = () =>
+  !twin.changes || window.confirm(`Leave without saving? ${twin.changes} unsaved change(s) will be lost.`)
+onBeforeRouteLeave(mayLeave)
+onBeforeRouteUpdate(mayLeave)
+const warnOnUnload = (e: BeforeUnloadEvent) => {
+  if (twin.changes) e.preventDefault()
+}
+window.addEventListener('beforeunload', warnOnUnload)
+onBeforeUnmount(() => window.removeEventListener('beforeunload', warnOnUnload))
 watch(editing, (on) => {
   if (!on) adding.value = false
 })
@@ -71,6 +83,21 @@ function commitPosition(axis: 'x' | 'y', value: string) {
         </v-chip>
         <v-chip v-else variant="outlined" prepend-icon="mdi-access-point-off">No placer on this track</v-chip>
       </div>
+
+      <v-sheet
+        v-if="twin.changes"
+        class="unsaved-bar d-flex flex-wrap align-center ga-2 mb-4 px-4 py-2"
+        rounded="lg"
+        border
+        role="status"
+      >
+        <v-icon icon="mdi-pencil-circle-outline" color="primary" />
+        <span class="flex-grow-1 text-body-medium">
+          {{ twin.changes }} unsaved {{ twin.changes === 1 ? 'change' : 'changes' }}
+        </span>
+        <v-btn variant="text" prepend-icon="mdi-undo" text="Revert" :disabled="twin.saving" @click="twin.revert" />
+        <v-btn color="primary" prepend-icon="mdi-content-save-outline" text="Save" :loading="twin.saving" @click="twin.save" />
+      </v-sheet>
 
       <v-row>
         <v-col cols="12" lg="8">
@@ -203,7 +230,7 @@ function commitPosition(axis: 'x' | 'y', value: string) {
               </v-row>
               <p class="text-body-small text-medium-emphasis">
                 {{ editing
-                  ? 'Moving a cone or changing its colour sends new guidance to the phone; the placer then moves the cone.'
+                  ? 'Changes stay here until you press Save. Saving sends new guidance to the phone; the placer then moves the cone.'
                   : 'Turn on "Edit track" to change this cone. You can also drag cones on the map.' }}
               </p>
             </v-card-text>
@@ -226,6 +253,12 @@ function commitPosition(axis: 'x' | 'y', value: string) {
 </template>
 
 <style scoped>
+.unsaved-bar {
+  position: sticky;
+  top: 64px;
+  z-index: 5;
+  background: rgb(var(--v-theme-surface));
+}
 .legend-alert {
   stroke: rgb(var(--v-theme-error));
 }

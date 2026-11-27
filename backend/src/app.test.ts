@@ -53,3 +53,36 @@ test('track ids are URL-safe', () => {
   assert.match(newTrackId('Skidpad (FSG) #2'), /^skidpad-fsg-2-[0-9a-f]{4}$/)
   assert.match(newTrackId('***'), /^track-[0-9a-f]{4}$/)
 })
+
+test('an edited track is saved in one request: moved, recoloured, added and removed cones', async () => {
+  const app = buildApp(memoryStore())
+  const { id } = (await app.inject({ method: 'POST', url: '/api/tracks', payload: plan })).json<TrackSummary>()
+  const cones = [
+    { id: 1, x: 3.25, y: 1.5, colour: 'blue' },
+    { id: 3, x: 2.1, y: -1.6, colour: 'yellow' },
+    { id: 4, x: 5, y: 0, colour: 'orange' },
+  ]
+  const saved = await app.inject({ method: 'PUT', url: `/api/tracks/${id}/cones`, payload: cones })
+  assert.equal(saved.statusCode, 200)
+  assert.deepEqual(saved.json<Track>().cones, cones.map((c) => ({ ...c, state: 'planned' })))
+
+  const reloaded = (await app.inject({ url: `/api/tracks/${id}` })).json<Track>()
+  assert.deepEqual(reloaded.cones.map((c) => c.id), [1, 3, 4])
+  assert.equal(reloaded.coneCount, 3)
+})
+
+test('a save with invalid cones is rejected and changes nothing', async () => {
+  const app = buildApp(memoryStore())
+  const { id } = (await app.inject({ method: 'POST', url: '/api/tracks', payload: plan })).json<TrackSummary>()
+  const save = async (payload: unknown, track = id) =>
+    (await app.inject({ method: 'PUT', url: `/api/tracks/${track}/cones`, payload: payload as object })).statusCode
+
+  assert.equal(await save([{ id: 1, x: 1, y: 1, colour: 'red' }]), 400)
+  assert.equal(await save([{ x: 1, y: 1, colour: 'blue' }]), 400)
+  assert.equal(await save([{ id: 1.5, x: 1, y: 1, colour: 'blue' }]), 400)
+  assert.equal(await save([{ id: 1, x: '1', y: 1, colour: 'blue' }]), 400)
+  assert.equal(await save([{ id: 2, x: 1, y: 1, colour: 'blue' }, { id: 2, x: 2, y: 2, colour: 'blue' }]), 400)
+  assert.equal(await save([]), 400)
+  assert.equal(await save([{ id: 1, x: 1, y: 1, colour: 'blue' }], 'nope'), 404)
+  assert.equal((await app.inject({ url: `/api/tracks/${id}` })).json<Track>().coneCount, 3)
+})
