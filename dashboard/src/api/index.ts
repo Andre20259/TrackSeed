@@ -23,6 +23,9 @@ export const getTrack = (id: string) => backend<Track>(`/tracks/${encodeURICompo
 
 export const uploadTrack = (plan: TrackPlan) => backend<TrackSummary>('/tracks', json('POST', plan))
 
+/** Deletes the track and all its cones. */
+export const deleteTrack = (id: string) => backend<null>(`/tracks/${encodeURIComponent(id)}`, { method: 'DELETE' })
+
 /** Subscribes to a track's live updates; returns the function that closes the connection. */
 export function connectTrack(_trackId: string, _onMessage: (m: ServerMessage) => void): () => void {
   // shortcut: no live channel yet, so the twin shows the stored plan; open the backend WebSocket here next.

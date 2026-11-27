@@ -4,7 +4,7 @@ import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import type { ConeColour } from '@shared/messages'
 import TwinMap from '@/components/TwinMap.vue'
 import { useTwinStore } from '@/stores/twin'
-import { CONE_COLOURS, CONE_HEX, formatDate, formatLength, STATE_LABEL, TRACK_TYPE_LABEL } from '@/lib/cones'
+import { COLOUR_LABEL, CONE_COLOURS, CONE_HEX, CONE_SCALE, formatDate, formatLength, STATE_LABEL, TRACK_TYPE_LABEL } from '@/lib/cones'
 
 const props = defineProps<{ id: string }>()
 const twin = useTwinStore()
@@ -106,8 +106,8 @@ function commitPosition(axis: 'x' | 'y', value: string) {
               <v-switch v-model="editing" label="Edit track" color="primary" hide-details inset class="ml-4" />
               <template v-if="editing">
                 <v-btn-toggle v-model="newColour" mandatory density="compact" class="ml-4" variant="outlined" divided>
-                  <v-btn v-for="c in CONE_COLOURS" :key="c" :value="c" :aria-label="`${c} cone`">
-                    <v-icon icon="mdi-circle" :color="CONE_HEX[c]" />
+                  <v-btn v-for="c in CONE_COLOURS" :key="c" :value="c" :aria-label="`${COLOUR_LABEL[c]} cone`" :title="COLOUR_LABEL[c]">
+                    <v-icon icon="mdi-circle" :color="CONE_HEX[c]" :size="16 * CONE_SCALE[c]" />
                   </v-btn>
                 </v-btn-toggle>
                 <v-btn
@@ -172,7 +172,7 @@ function commitPosition(axis: 'x' | 'y', value: string) {
                 prepend-icon="mdi-alert-circle"
                 base-color="error"
                 :title="`Cone ${c.id}: ${STATE_LABEL[c.state].toLowerCase()}`"
-                :subtitle="c.state === 'wrong_colour' ? `${c.foundColour} found, ${c.colour} expected` : 'Not found by the phone'"
+                :subtitle="c.state === 'wrong_colour' ? `${COLOUR_LABEL[c.foundColour ?? c.colour]} found, ${COLOUR_LABEL[c.colour].toLowerCase()} expected` : 'Not found by the phone'"
                 @click="twin.selectedId = c.id"
               />
             </v-list>
@@ -188,20 +188,21 @@ function commitPosition(axis: 'x' | 'y', value: string) {
                 Measured offset: <strong>{{ twin.selected.offsetCm }} cm</strong>
               </p>
               <div class="text-label-large mb-1">Colour</div>
-              <v-btn-toggle
+              <v-chip-group
                 :model-value="twin.selected.colour"
                 mandatory
-                density="compact"
-                variant="outlined"
-                divided
+                column
+                selected-class="text-primary"
                 :disabled="!editing"
                 class="mb-4"
                 @update:model-value="(c: ConeColour) => twin.setColour(twin.selected!.id, c)"
               >
-                <v-btn v-for="c in CONE_COLOURS" :key="c" :value="c" :text="c">
-                  <template #prepend><v-icon icon="mdi-circle" :color="CONE_HEX[c]" /></template>
-                </v-btn>
-              </v-btn-toggle>
+                <v-chip v-for="c in CONE_COLOURS" :key="c" :value="c" :text="COLOUR_LABEL[c]" variant="outlined">
+                  <template #prepend>
+                    <v-icon icon="mdi-circle" :color="CONE_HEX[c]" :size="11 * CONE_SCALE[c]" class="mr-1" />
+                  </template>
+                </v-chip>
+              </v-chip-group>
               <v-row density="compact">
                 <v-col cols="6">
                   <v-text-field

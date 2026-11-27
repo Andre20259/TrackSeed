@@ -60,7 +60,7 @@ test('an edited track is saved in one request: moved, recoloured, added and remo
   const cones = [
     { id: 1, x: 3.25, y: 1.5, colour: 'blue' },
     { id: 3, x: 2.1, y: -1.6, colour: 'yellow' },
-    { id: 4, x: 5, y: 0, colour: 'orange' },
+    { id: 4, x: 5, y: 0, colour: 'big_orange' },
   ]
   const saved = await app.inject({ method: 'PUT', url: `/api/tracks/${id}/cones`, payload: cones })
   assert.equal(saved.statusCode, 200)
@@ -86,3 +86,15 @@ test('a save with invalid cones is rejected and changes nothing', async () => {
   assert.equal(await save([{ id: 1, x: 1, y: 1, colour: 'blue' }], 'nope'), 404)
   assert.equal((await app.inject({ url: `/api/tracks/${id}` })).json<Track>().coneCount, 3)
 })
+
+test('a deleted track is gone from the list and its id gives a 404', async () => {
+  const app = buildApp(memoryStore())
+  const { id } = (await app.inject({ method: 'POST', url: '/api/tracks', payload: plan })).json<TrackSummary>()
+  const keep = (await app.inject({ method: 'POST', url: '/api/tracks', payload: plan })).json<TrackSummary>()
+
+  assert.equal((await app.inject({ method: 'DELETE', url: `/api/tracks/${id}` })).statusCode, 204)
+  assert.equal((await app.inject({ url: `/api/tracks/${id}` })).statusCode, 404)
+  assert.deepEqual((await app.inject({ url: '/api/tracks' })).json<TrackSummary[]>().map((t) => t.id), [keep.id])
+  assert.equal((await app.inject({ method: 'DELETE', url: `/api/tracks/${id}` })).statusCode, 404)
+})
+

@@ -48,6 +48,20 @@ for (const [name, make] of stores) {
       assert.equal(saved?.coneCount, 3)
     })
 
+    test('deleting a track removes it and its cones, and leaves the others', async () => {
+      const store = await make()
+      await store.insert('t1', plan)
+      await store.insert('t2', plan)
+      assert.equal(await store.remove('t1'), true)
+      assert.equal(await store.get('t1'), null)
+      assert.deepEqual((await store.list()).map((t) => t.id), ['t2'])
+      assert.equal((await store.get('t2'))?.coneCount, 3)
+      assert.equal(await store.remove('t1'), false)
+      // Its cones are gone too: the id can be used again from scratch.
+      await store.insert('t1', { ...plan, cones: plan.cones.slice(0, 1) })
+      assert.equal((await store.get('t1'))?.coneCount, 1)
+    })
+
     test('saving an unknown track changes nothing', async () => {
       const store = await make()
       await store.insert('t1', plan)

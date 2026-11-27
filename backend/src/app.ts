@@ -57,5 +57,9 @@ export function buildApp(store: TrackStore, logger = false) {
     },
   )
 
+  app.delete<TrackParams>('/api/tracks/:id', async (req, reply) =>
+    (await store.remove(req.params.id)) ? reply.code(204).send() : reply.code(404).send(trackNotFound(req.params.id)),
+  )
+
   return app
 }

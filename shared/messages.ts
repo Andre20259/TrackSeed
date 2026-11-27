@@ -1,7 +1,8 @@
 // Types shared by the dashboard and the backend (and mirrored by the Android app).
 // Positions are in metres in the track's local frame: origin at marker A, x east, y north.
 
-export type ConeColour = 'blue' | 'yellow' | 'orange'
+// 'orange' is the small orange cone; 'big_orange' the large one used at start, finish and timing lines.
+export type ConeColour = 'blue' | 'yellow' | 'orange' | 'big_orange'
 
 /** planned → placed (put down, being checked) → verified; or wrong_colour / missing after the check. */
 export type ConeState = 'planned' | 'placed' | 'verified' | 'wrong_colour' | 'missing'

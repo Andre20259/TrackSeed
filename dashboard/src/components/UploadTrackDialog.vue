@@ -28,7 +28,7 @@ const preview = computed<Cone[]>(() =>
   (plan.value?.cones ?? []).map((c, i) => ({ ...c, id: i + 1, state: 'verified' })),
 )
 const colourCounts = computed(() => {
-  const n = { blue: 0, yellow: 0, orange: 0 }
+  const n = { blue: 0, yellow: 0, orange: 0, big_orange: 0 }
   for (const c of plan.value?.cones ?? []) n[c.colour]++
   return n
 })
@@ -114,7 +114,7 @@ async function send() {
             </v-card>
             <div class="text-body-medium mb-2">
               {{ plan.cones.length }} cones: {{ colourCounts.blue }} blue, {{ colourCounts.yellow }} yellow,
-              {{ colourCounts.orange }} orange
+              {{ colourCounts.orange }} small orange, {{ colourCounts.big_orange }} big orange
             </div>
           </template>
           <ul v-if="imported.notes.length" class="text-body-small text-medium-emphasis pl-4 mb-2">
@@ -129,7 +129,7 @@ async function send() {
             <v-expansion-panel-text>
               <p class="text-body-medium mb-2">
                 Positions in metres from marker A (x east, y north). Type is skidpad, acceleration, autocross or
-                trackdrive.
+                trackdrive. Colour is blue, yellow, orange (small) or big_orange.
               </p>
               <pre class="example">{{ EXAMPLE_PLAN }}</pre>
             </v-expansion-panel-text>

@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { TrackSummary, TrackType } from '@shared/messages'
-import { listTracks } from '@/api'
+import { deleteTrack, listTracks } from '@/api'
 import UploadTrackDialog from '@/components/UploadTrackDialog.vue'
 import { formatDate, formatLength, TRACK_TYPE_LABEL, TRACK_TYPES } from '@/lib/cones'
 
@@ -19,6 +19,7 @@ const headers = [
   { title: 'Cones', key: 'coneCount', align: 'end' as const },
   { title: 'Length', key: 'lengthM', align: 'end' as const },
   { title: 'Uploaded', key: 'uploadedAt' },
+  { title: '', key: 'actions', sortable: false, align: 'end' as const },
 ]
 
 const shown = computed(() => tracks.value.filter((t) => type.value == null || t.type === type.value))
@@ -39,6 +40,32 @@ async function load() {
 
 function openTrack(_e: unknown, row: { item: TrackSummary }) {
   router.push(`/tracks/${row.item.id}`)
+}
+
+// Deleting cannot be undone, so it always goes through a confirmation dialog.
+const toDelete = ref<TrackSummary | null>(null)
+const deleting = ref(false)
+const deleteError = ref<string | null>(null)
+
+function askDelete(track: TrackSummary) {
+  deleteError.value = null
+  toDelete.value = track
+}
+
+async function confirmDelete() {
+  const track = toDelete.value
+  if (!track) return
+  deleting.value = true
+  deleteError.value = null
+  try {
+    await deleteTrack(track.id)
+    tracks.value = tracks.value.filter((t) => t.id !== track.id)
+    toDelete.value = null
+  } catch (e) {
+    deleteError.value = e instanceof Error ? e.message : String(e)
+  } finally {
+    deleting.value = false
+  }
 }
 
 function onUploaded(t: TrackSummary) {
@@ -98,11 +125,40 @@ onMounted(load)
         <template #[`item.type`]="{ item }">{{ TRACK_TYPE_LABEL[item.type] }}</template>
         <template #[`item.lengthM`]="{ item }">{{ formatLength(item.lengthM) }}</template>
         <template #[`item.uploadedAt`]="{ item }">{{ formatDate(item.uploadedAt) }}</template>
+        <template #[`item.actions`]="{ item }">
+          <v-btn
+            icon="mdi-delete-outline"
+            variant="text"
+            size="small"
+            :aria-label="`Delete ${item.name}`"
+            title="Delete track"
+            @click.stop="askDelete(item)"
+          />
+        </template>
         <template #no-data>No tracks yet. Upload a track file (YAML or JSON) to start.</template>
       </v-data-table>
     </v-card>
 
     <UploadTrackDialog v-model="uploading" @uploaded="onUploaded" />
+
+    <v-dialog
+      :model-value="!!toDelete"
+      max-width="460"
+      :persistent="deleting"
+      @update:model-value="(open: boolean) => { if (!open) toDelete = null }"
+    >
+      <v-card v-if="toDelete" :title="`Delete “${toDelete.name}”?`">
+        <v-card-text>
+          This removes the track and its {{ toDelete.coneCount }} cones from the team library. It can't be undone.
+          <v-alert v-if="deleteError" type="error" variant="tonal" class="mt-4" :text="deleteError" />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text="Cancel" :disabled="deleting" @click="toDelete = null" />
+          <v-btn color="error" variant="flat" text="Delete track" :loading="deleting" @click="confirmDelete" />
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 

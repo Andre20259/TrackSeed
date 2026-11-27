@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import type { Cone } from '@shared/messages'
-import { CONE_HEX, STATE_LABEL } from '@/lib/cones'
+import { COLOUR_LABEL, CONE_HEX, CONE_SCALE, STATE_LABEL } from '@/lib/cones'
 
 const props = withDefaults(
   defineProps<{
@@ -51,6 +51,39 @@ function toWorld(e: PointerEvent) {
 
 const at = (c: Cone) => (drag.value?.id === c.id ? drag.value : c)
 
+// Crosshair: always exactly at the pointer (no snapping, so cones can be placed precisely);
+// over a cone, or while dragging one, it also names that cone.
+const pointer = ref<{ x: number; y: number } | null>(null)
+const hoveredId = ref<number | null>(null)
+const aimCone = computed(() => {
+  const id = drag.value?.id ?? hoveredId.value
+  return id == null ? null : (props.cones.find((c) => c.id === id) ?? null)
+})
+const aim = computed(() => drag.value ?? pointer.value)
+// The whole map window in drawing units. It is larger than `box` when the window's shape differs from the
+// track's (the drawing is centred), so the crosshair uses this to reach every edge.
+const view = ref(box.value)
+function measureView() {
+  const el = svg.value
+  const m = el?.getScreenCTM()
+  if (!el || !m) return
+  const rect = el.getBoundingClientRect()
+  const inv = m.inverse()
+  const a = new DOMPoint(rect.left, rect.top).matrixTransform(inv)
+  const b = new DOMPoint(rect.right, rect.bottom).matrixTransform(inv)
+  view.value = { x: a.x, y: a.y, w: b.x - a.x, h: b.y - a.y }
+}
+// Labels move to the other side of the lines near the right, top and bottom edges so they stay on the map.
+const flipX = computed(() => !!aim.value && aim.value.x > view.value.x + view.value.w * 0.72)
+const nearTop = computed(() => !!aim.value && -aim.value.y < view.value.y + r.value * 6)
+const nearBottom = computed(() => !!aim.value && -aim.value.y > view.value.y + view.value.h - r.value * 8)
+const metres = (v: number) => `${v.toFixed(2)} m`
+
+function leave() {
+  pointer.value = null
+  hoveredId.value = null
+}
+
 function style(c: Cone) {
   const hex = CONE_HEX[c.state === 'wrong_colour' ? (c.foundColour ?? c.colour) : c.colour]
   const w = r.value * 0.5
@@ -67,6 +100,7 @@ function style(c: Cone) {
 }
 
 function onConeDown(e: PointerEvent, c: Cone) {
+  if (props.adding) return // let the click reach the ground: a new cone goes exactly where clicked
   e.stopPropagation()
   emit('select', c.id)
   if (!props.editable) return
@@ -75,9 +109,10 @@ function onConeDown(e: PointerEvent, c: Cone) {
 }
 
 function onMove(e: PointerEvent) {
-  if (!drag.value) return
+  measureView()
   const p = toWorld(e)
-  if (p) drag.value = { id: drag.value.id, ...p }
+  pointer.value = p
+  if (drag.value && p) drag.value = { id: drag.value.id, ...p }
 }
 
 function onUp() {
@@ -107,6 +142,7 @@ function onGround(e: PointerEvent) {
     @pointermove="onMove"
     @pointerup="onUp"
     @pointercancel="drag = null"
+    @pointerleave="leave"
   >
     <g class="scale" :transform="`translate(${box.x + r * 4} ${box.y + box.h - r * 4})`">
       <line x1="0" :x2="scaleM" y1="0" y2="0" :stroke-width="r * 0.4" />
@@ -114,15 +150,15 @@ function onGround(e: PointerEvent) {
       <line :x1="scaleM" :x2="scaleM" :y1="-r" y2="0" :stroke-width="r * 0.4" />
       <text :x="scaleM / 2" :y="-r * 1.6" :font-size="r * 3.2" text-anchor="middle">{{ scaleM }} m</text>
     </g>
-    <text class="north" :x="box.x + box.w - r * 4" :y="box.y + r * 5" :font-size="r * 3.2" text-anchor="middle">N ↑</text>
 
     <g
       v-for="c in cones"
       :key="c.id"
       class="cone"
       @pointerdown="onConeDown($event, c)"
+      @pointerenter="hoveredId = c.id"
+      @pointerleave="hoveredId = null"
     >
-      <title>Cone {{ c.id }} · {{ c.colour }} · {{ STATE_LABEL[c.state] }}</title>
       <circle :cx="at(c).x" :cy="-at(c).y" :r="r * 3" fill="transparent" />
       <circle
         v-if="c.id === selectedId"
@@ -140,7 +176,27 @@ function onGround(e: PointerEvent) {
         :r="r * 2"
         :stroke-width="r * 0.5"
       />
-      <circle :cx="at(c).x" :cy="-at(c).y" :r="c.colour === 'orange' ? r * 1.3 : r" :style="style(c)" />
+      <circle :cx="at(c).x" :cy="-at(c).y" :r="r * CONE_SCALE[c.colour]" :style="style(c)" />
+    </g>
+
+    <g v-if="aim" class="crosshair" :class="{ 'over-cone': aimCone }" pointer-events="none" aria-hidden="true">
+      <line :x1="aim.x" :x2="aim.x" :y1="view.y" :y2="view.y + view.h" vector-effect="non-scaling-stroke" />
+      <line :x1="view.x" :x2="view.x + view.w" :y1="-aim.y" :y2="-aim.y" vector-effect="non-scaling-stroke" />
+      <text
+        :x="aim.x + (flipX ? -r : r)"
+        :y="view.y + r * 3.5"
+        :font-size="r * 2.8"
+        :text-anchor="flipX ? 'end' : 'start'"
+      >x {{ metres(aim.x) }}</text>
+      <text :x="view.x + r" :y="-aim.y + (nearTop ? r * 3.5 : -r)" :font-size="r * 2.8">y {{ metres(aim.y) }}</text>
+      <text
+        v-if="aimCone"
+        class="cone-label"
+        :x="aim.x + (flipX ? -r * 3 : r * 3)"
+        :y="-aim.y + (nearBottom ? -r * 3 : r * 5)"
+        :font-size="r * 3"
+        :text-anchor="flipX ? 'end' : 'start'"
+      >Cone {{ aimCone.id }} · {{ COLOUR_LABEL[aimCone.colour].toLowerCase() }} · {{ STATE_LABEL[aimCone.state].toLowerCase() }}</text>
     </g>
   </svg>
 </template>
@@ -161,6 +217,9 @@ function onGround(e: PointerEvent) {
 .twin-map.editable .cone {
   cursor: grab;
 }
+.twin-map.adding .cone {
+  cursor: crosshair;
+}
 .ring-selected {
   fill: none;
   stroke: rgb(var(--v-theme-primary));
@@ -169,11 +228,30 @@ function onGround(e: PointerEvent) {
   fill: none;
   stroke: rgb(var(--v-theme-error));
 }
+.crosshair line {
+  stroke: rgba(var(--v-theme-on-surface), 0.35);
+  stroke-width: 1;
+}
+.crosshair.over-cone line {
+  stroke: rgb(var(--v-theme-primary));
+}
+/* A halo in the card colour keeps labels readable over cones and lines. */
+.crosshair text {
+  fill: rgba(var(--v-theme-on-surface), 0.9);
+  paint-order: stroke;
+  stroke: rgb(var(--v-theme-surface));
+  stroke-width: 0.35em;
+  stroke-linejoin: round;
+  font-variant-numeric: tabular-nums;
+}
+.crosshair .cone-label {
+  fill: rgb(var(--v-theme-primary));
+  font-weight: 600;
+}
 .scale line {
   stroke: rgba(var(--v-theme-on-surface), 0.6);
 }
-.scale text,
-.north {
+.scale text {
   fill: rgba(var(--v-theme-on-surface), 0.6);
 }
 </style>

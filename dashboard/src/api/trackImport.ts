@@ -10,14 +10,19 @@ export interface ImportedTrack {
   notes: string[]
 }
 
+// Keys are normalised (lower case, "-" and spaces as "_"): files write both "big-orange" and "big_orange".
+// A plain "orange" is the small cone.
 const CLASS_COLOUR: Record<string, ConeColour> = {
   blue: 'blue',
   yellow: 'yellow',
   orange: 'orange',
-  big_orange: 'orange',
-  orange_big: 'orange',
-  large_orange: 'orange',
+  small_orange: 'orange',
+  orange_small: 'orange',
+  big_orange: 'big_orange',
+  orange_big: 'big_orange',
+  large_orange: 'big_orange',
 }
+const classKey = (cls: string) => cls.trim().toLowerCase().replace(/[-\s]+/g, '_')
 // Lists in the FS format whose items may have no "class": their side gives the colour.
 const SIDE_COLOUR: Record<string, ConeColour> = { left: 'blue', right: 'yellow' }
 
@@ -57,7 +62,7 @@ export function readTrackFile(text: string): ImportedTrack | { error: string } {
     for (const item of items as Record<string, unknown>[]) {
       const pos = item?.position
       const cls = typeof item?.class === 'string' ? item.class : undefined
-      const colour = cls ? CLASS_COLOUR[cls] : SIDE_COLOUR[list]
+      const colour = cls ? CLASS_COLOUR[classKey(cls)] : SIDE_COLOUR[list]
       if (Array.isArray(pos) && typeof pos[0] === 'number' && typeof pos[1] === 'number' && colour) {
         cones.push({ x: mm(pos[0]), y: mm(pos[1]), colour })
       } else {

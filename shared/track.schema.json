@@ -19,7 +19,10 @@
         "properties": {
           "x": { "type": "number", "minimum": -5000, "maximum": 5000 },
           "y": { "type": "number", "minimum": -5000, "maximum": 5000 },
-          "colour": { "enum": ["blue", "yellow", "orange"] }
+          "colour": {
+            "description": "orange is the small orange cone; big_orange the large one at start, finish and timing lines.",
+            "enum": ["blue", "yellow", "orange", "big_orange"]
+          }
         }
       }
     }

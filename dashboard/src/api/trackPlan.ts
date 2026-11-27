@@ -37,7 +37,7 @@ export function checkTrackPlan(input: unknown): PlanCheck {
       if (!finite(x) || !finite(y) || Math.abs(x) > MAX_COORD_M || Math.abs(y) > MAX_COORD_M) {
         errors.push(`Cone ${i + 1}: "x" and "y" must be numbers in metres (within ±${MAX_COORD_M} m).`)
       } else if (!CONE_COLOURS.includes(colour as ConeColour)) {
-        errors.push(`Cone ${i + 1}: "colour" must be blue, yellow or orange.`)
+        errors.push(`Cone ${i + 1}: "colour" must be blue, yellow, orange or big_orange.`)
       } else {
         cones.push({ x, y, colour: colour as ConeColour })
       }
@@ -52,7 +52,7 @@ export const EXAMPLE_PLAN = `{
   "name": "Skidpad (FSG)",
   "type": "skidpad",
   "cones": [
-    { "x": 0.0, "y": 0.0, "colour": "orange" },
+    { "x": 0.0, "y": 0.0, "colour": "big_orange" },
     { "x": 1.5, "y": 7.6, "colour": "blue" },
     { "x": 1.5, "y": 10.6, "colour": "yellow" }
   ]

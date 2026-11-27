@@ -9,6 +9,8 @@ export interface TrackStore {
   insert(id: string, plan: TrackPlan): Promise<TrackSummary>
   /** Makes the track's cones exactly `cones` (edited, added and removed at once); null if the track does not exist. */
   saveCones(trackId: string, cones: SavedCone[]): Promise<Track | null>
+  /** Deletes the track and all its cones; false if it does not exist. */
+  remove(trackId: string): Promise<boolean>
 }
 
 // The twin has no stored cone states yet: every cone is planned until the phone confirms it.
@@ -38,6 +40,9 @@ export function memoryStore(): TrackStore {
       t.cones = [...cones].sort((a, b) => a.id - b.id).map(planned)
       t.coneCount = t.cones.length
       return structuredClone(t)
+    },
+    async remove(trackId) {
+      return tracks.delete(trackId)
     },
   }
 }
@@ -146,6 +151,12 @@ export async function pgStore(query: Query): Promise<TrackStore> {
         [trackId, JSON.stringify(cones)],
       )
       return rows.length ? store.get(trackId) : null
+    },
+
+    async remove(trackId) {
+      // The cones go with it: cones.track_id is "on delete cascade".
+      const { rows } = await query(`delete from tracks where id = $1 returning id`, [trackId])
+      return rows.length > 0
     },
   }
   return store
